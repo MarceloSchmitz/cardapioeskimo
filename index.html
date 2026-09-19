@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+<title>Eskimó Sorvetes Laguna — Cardápio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #ED062A;
+    --bg-deep: #ED062A;
+    --card: #FFF8E7;
+    --ink: #FFF8E7;
+    --ink-deep: #7A0F14;
+    --raspberry: #FF4D6D;
+    --lime: #B5E655;
+    --mango: #FFB627;
+    --grape: #B18CFF;
+    --yellow: #FFC72C;
+    --radius: 16px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: #ED062A;
+    color: var(--ink);
+    font-family: 'Nunito', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ transition: none !important; }
+  }
+
+  /* ---------- CAPA ---------- */
+  .cover{
+    width: 100%;
+    background: var(--bg);
+  }
+
+  .cover img{
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  main{
+    margin: 0 auto;
+  }
+
+  /* ---------- CARROSSEL ---------- */
+  .carousel-wrap{
+    position: relative;
+    margin: 0 0 8px;
+  }
+
+  .carousel{
+    --item-w: min(72vw, 340px);
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 36px calc((100% - var(--item-w)) / 2) 40px;
+    scrollbar-width: none;
+  }
+
+  .carousel::-webkit-scrollbar{ display: none; }
+
+  .slot{
+    position: relative;
+    flex: 0 0 var(--item-w);
+    width: var(--item-w);
+    aspect-ratio: 16 / 9;
+    scroll-snap-align: center;
+    will-change: transform;
+  }
+
+  .video-card{
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow .2s ease;
+    background: linear-gradient(160deg, var(--flavor-a, var(--raspberry)), var(--flavor-b, var(--mango)));
+  }
+
+  .slot.is-center .video-card{
+    box-shadow: 0 24px 48px rgba(0,0,0,.45);
+  }
+
+  .video-card video{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .video-card .label{
+    display: none;
+  }
+
+  .video-card:focus-visible{
+    outline: 3px solid var(--lime);
+    outline-offset: 3px;
+  }
+
+  .carousel-arrow{
+    display: none;
+  }
+
+  @media (hover: hover) and (pointer: fine){
+    .carousel-arrow{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: var(--card);
+      color: var(--ink-deep);
+      font-size: 1.3rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,.3);
+      z-index: 15;
+    }
+    .carousel-arrow.prev{ left: 4px; }
+    .carousel-arrow.next{ right: 4px; }
+    .carousel-arrow:hover{ background: var(--yellow); }
+  }
+
+  .swipe-hint{
+    text-align: center;
+    font-family: 'Anton', sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: clamp(1.1rem, 5vw, 1.6rem);
+    letter-spacing: 0.02em;
+    color: var(--card);
+    -webkit-text-stroke: 1.5px var(--ink-deep);
+    text-shadow: 0 3px 0 var(--ink-deep);
+    margin: 28px 0 0;
+    padding: 0 16px;
+    line-height: 1.15;
+  }
+
+  /* ---------- FOOTER / AVALIAÇÃO ---------- */
+  footer{
+    max-width: 420px;
+    margin: 56px auto 40px;
+    padding: 28px 24px 30px;
+    text-align: center;
+    background: var(--card);
+    color: var(--ink-deep);
+    border-radius: 22px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.28);
+  }
+
+  .stars{
+    font-size: 4.3rem;
+    letter-spacing: 3px;
+    color: var(--yellow);
+    margin-bottom: 6px;
+  }
+
+  footer p.avalie{
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin: 0 0 16px;
+  }
+
+  footer img.qr{
+    width: 210px;
+    height: 210px;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  footer .sub{
+    margin: 14px 0 0;
+    font-size: 0.92rem;
+    opacity: 0.7;
+    font-weight: 600;
+  }
+
+  footer .review-link{
+    display: inline-block;
+    margin-top: 14px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--ink-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  footer .review-link:hover{
+    color: var(--raspberry);
+  }
+
+  /* ---------- FILTROS + AVALIAÇÃO ---------- */
+  .bottom-area{
+    max-width: 980px;
+    margin: 56px auto 40px;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) 420px;
+    gap: 48px;
+    align-items: stretch;
+  }
+
+  .filter-menu{
+    padding: 28px 24px 30px;
+    background: var(--card);
+    color: var(--ink-deep);
+    border-radius: 22px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.28);
+  }
+
+  .filter-menu h2{
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.55rem;
+    margin: 0 0 18px;
+    text-align: center;
+  }
+
+  .filter-links{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .filter-btn{
+    width: 100%;
+    border: 0;
+    border-radius: 12px;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    color: var(--ink-deep);
+    background: #FFC72C;
+    font-size: 1.05rem;
+    padding: 14px 16px;
+    min-height: 48px;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+
+  .filter-btn:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(0,0,0,.16);
+  }
+
+  .filter-btn.active{
+    outline: 3px solid var(--ink-deep);
+  }
+
+  .clear-filter{
+    margin-top: 16px;
+    background: var(--ink-deep);
+    color: var(--card);
+  }
+
+  .bottom-area footer{
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  @media (max-width: 760px){
+    .bottom-area{
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .filter-menu{ order: 1; }
+    .bottom-area footer{ order: 2; }
+  }
+
+
+  .product-info{
+    max-width: 680px;
+    margin: 0 auto 18px;
+    padding: 16px 48px 16px 20px;
+    position: relative;
+    background: var(--card);
+    color: var(--ink-deep);
+    border-radius: 16px;
+    box-shadow: 0 12px 28px rgba(0,0,0,.22);
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.45;
+    text-align: center;
+    display: none;
+  }
+
+  .product-info.open{
+    display: block;
+  }
+
+  .product-info-close{
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--ink-deep);
+    color: var(--card);
+    font-size: 1.15rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+</style>
+</head>
+<body>
+
+  <!--
+    FOTO DE CAPA: troque "assets/IMG_Capa.png" pelo caminho da sua imagem.
+    Use uma imagem na proporção 820x312 (a mesma do Facebook) para
+    ela preencher o retângulo sem cortar de forma estranha.
+  -->
+  <!--
+    FOTO DE CAPA: troque "assets/IMG_Capa.png" pelo caminho da sua imagem
+    (essa arte já vem com o logo redondo embutido nela).
+  -->
+  <div class="cover">
+    <img src="assets/IMG_Capa.png" alt="Eskimó Sorvetes — é verão o ano todo" fetchpriority="high" decoding="async">
+  </div>
+
+  <main>
+    <p class="swipe-hint">Arraste para o lado e conheça nossas delícias</p>
+    <div class="carousel-wrap">
+      <button class="carousel-arrow prev" id="prevBtn" aria-label="Vídeo anterior">‹</button>
+      <div class="carousel" id="grid">
+        <!-- Os 30 itens são gerados pelo script abaixo, a partir da lista "sabores". -->
+      </div>
+      <button class="carousel-arrow next" id="nextBtn" aria-label="Próximo vídeo">›</button>
+    </div>
+    <div class="product-info" id="productInfo" aria-live="polite">
+      <button class="product-info-close" id="productInfoClose" aria-label="Fechar">×</button>
+      <div id="productInfoText"></div>
+    </div>
+  </main>
+
+  <section class="bottom-area">
+    <aside class="filter-menu" aria-label="Filtros do cardápio">
+      <h2>O que você está procurando?</h2>
+      <div class="filter-links">
+        <button class="filter-btn" data-filter="picoles">Picolés</button>
+        <button class="filter-btn" data-filter="potes">Potes de Sorvete</button>
+        <button class="filter-btn" data-filter="zero">Zero Açúcar</button>
+        <button class="filter-btn" data-filter="queridinhos">Os Queridinhos</button>
+        <button class="filter-btn" data-filter="experimentar">Para Experimentar e se Apaixonar</button>
+	<button class="filter-btn" data-filter="kids">Para as Crianças</button>
+      </div>
+      <button class="filter-btn clear-filter" id="clearFilter">Limpar Filtro</button>
+    </aside>
+
+    <footer>
+      <div class="stars">★★★★★</div>
+      <p class="avalie">Não esqueça de avaliar!</p>
+      <img class="qr" id="reviewQr" alt="QR code para avaliação no Google" loading="lazy">
+      <p class="sub">aponte a câmera para avaliar no Google</p>
+      <a class="review-link" id="reviewLink" href="#" target="_blank" rel="noopener">Clique aqui para avaliar</a>
+    </footer>
+  </section>
+
+<script>
+  // ---------------------------------------------------------------
+  // 1) SABORES / VÍDEOS
+  //    - "nome": aparece como rótulo sobre o vídeo
+  //    - "video": caminho do arquivo .mp4 (coloque os arquivos numa
+  //      pasta "videos/" ao lado deste HTML, com esse mesmo nome)
+  //    - "cores": só decoram o quadrado enquanto o vídeo não carrega
+  // ---------------------------------------------------------------
+  const sabores = [
+    { nome: "Picolé de Fruta: Abacaxi | Brasileirinho | Framboesa | Limão | Maracujá |  Mini Saia | Morango | Uva",            video: "videos/Picole_Fruta.mp4",            cores: ["#FF4D6D", "#FFB627"] },
+    { nome: "Picolé de Creme: Chocolate | Coco Branco | Doce de Leite | Leite Condensado | Milho Verde | Morango | Nata ",  video: "videos/Picole_Creme.mp4",          cores: ["#7B4B3A", "#B18CFF"] },
+    { nome: "Diamond: Chocomalt | Cookies | Cookies Branco | Frutas Vermelhas | Pistache",              video: "videos/Diamond.mp4",              cores: ["#B5E655", "#FFB627"] },
+    { nome: "Skimo | Brigadeiro",               video: "videos/Skimo_Brigadeiro.mp4",          cores: ["#FFFBF2", "#B5E655"] },
+    { nome: "La Sobremesa: Açaí com Leitinho | Limonada Suiça | Pudim de Leite | Sagu | ",        video: "videos/La_Sobremesa.mp4",              cores: ["#FFB627", "#FF4D6D"] },
+    { nome: "Super Barrita | Chocotine",           video: "videos/Barrita_Chocotine.mp4",           cores: ["#FFD23F", "#FF4D6D"] },
+    { nome: "Los Palitos Mexicanos: Maracujá com Leite Condensado | Morango com Leite Condensado ",            video: "videos/Paletas.mp4",            cores: ["#FFE066", "#B5E655"] },
+    { nome: "Creme Speciale: Chocolate | Picolé Grego: Frutas Vermelhas",                video: "videos/CremeSpeciale_Grego.mp4",                cores: ["#7B4BAE", "#B18CFF"] },
+    { nome: "Picolé de Itu",               video: "videos/Itu.mp4",               cores: ["#4B2A6B", "#B18CFF"] },
+    { nome: "Ituzinho: Leitinho Trufado | Chicletes",              video: "videos/Ituzinho.mp4",              cores: ["#FFFBF2", "#FFB627"] },
+    { nome: "Picolé Turma da Mônica: Morango | Maça Verde | Tutti-Frutti",             video: "videos/TurmaMonica.mp4",             cores: ["#C68E5A", "#FFB627"] },
+    { nome: "Turma do Bob Esponja: Patrick Estrela | Bob Esponja",         video: "videos/BobEsponja.mp4",         cores: ["#4A2C2A", "#B18CFF"] },
+    { nome: "Picolé Unicórnio",              video: "videos/Unicornio.mp4",              cores: ["#5AD9B1", "#B5E655"] },
+    { nome: "Picolápis Surpresa",          video: "videos/Picolapis.mp4",          cores: ["#E0345C", "#B18CFF"] },
+    { nome: "Linha +Coco: Coco | Paçoca | Coco Queimado",               video: "videos/LinhaMaisCoco.mp4",               cores: ["#FF8A4C", "#FFD23F"] },
+    { nome: "Linha Seletto: Crocante | Pistache | Brigadeiro",             video: "videos/Seletto.mp4",             cores: ["#E5637A", "#B5E655"] },
+    { nome: "Best Cup: Pistache",           video: "videos/BestCup.mp4",           cores: ["#FF5D6C", "#5AD9B1"] },
+    { nome: "Copinho Gourmet: Bombom de Coco | Caramelo Salgado & Cookies | Morango ao Leite | Torta de Limão",          video: "videos/Copinho.mp4",          cores: ["#FF9F1C", "#FFD23F"] },
+    { nome: "Sundae: Baunilha com Chocotella | Fruta do Bosco",            video: "videos/Sundae.mp4",            cores: ["#D9A441", "#7B4B3A"] },
+    { nome: "Napolicup: Napolitano",            video: "videos/Napolicup.mp4",            cores: ["#D9A441", "#7B4B3A"] },
+    { nome: "Moreninha",           video: "videos/Moreninha.mp4",           cores: ["#C68E5A", "#7B4B3A"] },
+    { nome: "Picolé Zero Açúcar: Coco | Chocolate",      video: "videos/Picole_Zero.mp4",      cores: ["#C99B5A", "#FFB627"] },
+    { nome: "Sorvete Zero Açúcar (1L): Beijinho Sírio | Napolitano | Frutas Vermelhas",               video: "videos/Pote_Zero.mp4",               cores: ["#4A2C2A", "#C68E5A"] },
+    { nome: "Grand Nevado (1,5L): Banoffee | Nata Trufada | Yogurte Grego com Amora",           video: "videos/Grand_Nevado.mp4",           cores: ["#8BAE5A", "#B5E655"] },
+    { nome: "Pote de Sorvete (2L) Diversos Sabores: Abacaxi com Coco | Banana com Chocotela | Brigadeiro | Cappuccino | Cereja e Amarena | Chocolate Branco | Chocomenta | Coco com Milho Verde | Creme | Creme + Flocos + Chocolate | Crocante | Flocos | Flocos + Morango Xadrez | Leitinho Trufado | Marta Rocha | Morango | Mousse de Maracujá Trufado | Napolitano | Nata + Uva | Sensazione | Tramontaro | Trufa | Passas ao Rum",               video: "videos/Pote_2L.mp4",               cores: ["#FFFBF2", "#FFD23F"] },
+  ];
+
+  const grid = document.getElementById('grid');
+  let cards = [];
+  let listaAtual = [...sabores];
+  let centerCard = null;
+  let ticking = false;
+
+  // Categorias dos filtros. Para alterar no futuro, basta mudar os nomes
+  // dos arquivos ou adicionar/remover condições aqui.
+  function pertenceAoFiltro(s, filtro){
+    // Usa exclusivamente o nome do arquivo de vídeo para evitar
+    // classificações acidentais por palavras presentes no rótulo.
+    const arquivo = s.video.split('/').pop().replace(/\.mp4$/i, '');
+
+    const categorias = {
+      picoles: [
+        "Picole_Fruta", "Picole_Creme", "Diamond", "Skimo_Brigadeiro",
+        "La_Sobremesa", "Barrita_Chocotine", "Paletas", "CremeSpeciale_Grego",
+        "Itu", "Ituzinho", "TurmaMonica", "BobEsponja", "Unicornio",
+        "Picolapis", "LinhaMaisCoco", "Seletto", "Picole_Zero"
+      ],
+      potes: [
+        "BestCup", "Copinho", "Napolicup", "Grand_Nevado", "Pote_2L", "Pote_Zero", "Sundae"
+      ],
+      zero: [
+        "Pote_Zero", "Picole_Zero"
+      ],
+      queridinhos: [
+        "Skimo_Brigadeiro", "BobEsponja", "Paletas", "Seletto",
+        "Diamond", "LinhaMaisCoco", "Barrita_Chocotine"
+      ],
+      experimentar: [
+        "La_Sobremesa", "LinhaMaisCoco", "BestCup"
+      ],
+      kids: [
+        "Copinho", "BobEsponja", "TurmaMonica", "Picolapis", "Unicornio"
+      ]
+    };
+
+    return categorias[filtro] ? categorias[filtro].includes(arquivo) : true;
+  }
+
+  function criarItem(s){
+    const slot=document.createElement('div');
+    slot.className='slot';
+
+    const card=document.createElement('div');
+    card.className='video-card';
+    card.tabIndex=0;
+    card.style.setProperty('--flavor-a',s.cores[0]);
+    card.style.setProperty('--flavor-b',s.cores[1]);
+
+    // O vídeo só recebe "src" quando o slot se aproxima da tela
+    // (ver loadVideo/lazyObserver). Isso evita baixar os ~90 vídeos
+    // do carrossel de uma vez só ao abrir a página.
+    const video=document.createElement('video');
+    video.dataset.src=s.video;
+    video.muted=true;
+    video.defaultMuted=true;
+    video.setAttribute('muted','');
+    video.loop=true;
+    video.playsInline=true;
+    video.setAttribute('playsinline','');
+    video.setAttribute('webkit-playsinline','');
+    video.preload='none';
+
+    const label=document.createElement('span');
+    label.className='label';
+    label.textContent=s.nome;
+    card.append(video,label);
+    slot.appendChild(card);
+
+    card.addEventListener('click',()=>{
+      slot.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+      abrirDetalhes(s.nome);
+    });
+
+    return {slot,video,card};
+  }
+
+  // Tenta tocar um vídeo. Se o navegador bloquear o autoplay (raro com
+  // muted+playsinline, mas acontece em alguns webviews/tablets), guarda
+  // o vídeo para tentar de novo no primeiro toque do usuário na página.
+  let pendingPlay=null;
+  function tentarTocar(video){
+    const p=video.play();
+    if(p && typeof p.catch==='function'){
+      p.then(()=>{ if(pendingPlay===video) pendingPlay=null; })
+       .catch(()=>{ pendingPlay=video; });
+    }
+  }
+
+  document.addEventListener('pointerdown',()=>{
+    if(pendingPlay){ tentarTocar(pendingPlay); }
+    if(centerCard){
+      const curr=cards.find(c=>c.slot===centerCard);
+      if(curr && curr.video.paused) tentarTocar(curr.video);
+    }
+  },{passive:true});
+
+  document.addEventListener('visibilitychange',()=>{
+    if(!document.hidden && centerCard){
+      const curr=cards.find(c=>c.slot===centerCard);
+      if(curr && curr.video.paused) tentarTocar(curr.video);
+    }
+  });
+
+  // Carrega o vídeo (define o src) só quando necessário. Ao terminar de
+  // carregar, mostra 1 frame como prévia — a menos que o item já seja
+  // o card central, caso em que ele continua tocando (e ficando) em
+  // reprodução automaticamente.
+  function loadVideo(video,cardEl){
+    if(video.src) return;
+    // preload="none" só busca dados quando play() é chamado, o que gerava
+    // um atraso perceptível (rede) até o vídeo aparecer. Trocando para
+    // "auto" e disparando o carregamento assim que o slot entra na zona
+    // de proximidade (antes mesmo de virar o centro), o vídeo já está
+    // bufferizado quando o usuário chega nele.
+    video.preload='auto';
+    video.addEventListener('loadeddata',()=>{
+      tentarTocar(video);
+      if(!cardEl.classList.contains('is-center')){
+        setTimeout(()=>{
+          if(!cardEl.classList.contains('is-center')) video.pause();
+        },1200);
+      }
+    },{once:true});
+    video.src=video.dataset.src;
+    video.load();
+  }
+
+  // Libera memória/rede removendo o src de vídeos que saíram da área
+  // próxima da tela.
+  function unloadVideo(video){
+    if(!video.src) return;
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+  }
+
+  const productInfo = document.getElementById('productInfo');
+  const productInfoText = document.getElementById('productInfoText');
+  const productInfoClose = document.getElementById('productInfoClose');
+
+  function abrirDetalhes(texto){
+    productInfoText.textContent = texto;
+    productInfo.classList.add('open');
+  }
+
+  function fecharDetalhes(){
+    productInfo.classList.remove('open');
+  }
+
+  productInfoClose.addEventListener('click', fecharDetalhes);
+
+  let lazyObserver=null;
+
+  function montarCarrossel(lista){
+    cards.forEach(({video})=>video.pause());
+    if(lazyObserver) lazyObserver.disconnect();
+    grid.innerHTML='';
+    cards=[];
+    centerCard=null;
+    listaAtual=[...lista];
+
+    // Mantém o efeito infinito mesmo quando um filtro está ativo.
+    for(let bloco=0;bloco<3;bloco++){
+      listaAtual.forEach(s=>{
+        const item=criarItem(s);
+        grid.appendChild(item.slot);
+        cards.push(item);
+      });
+    }
+
+    // Só carrega (baixa) o vídeo de um slot quando ele está a até 1.5
+    // "telas" de distância do carrossel; ao se afastar, o src é removido.
+    lazyObserver=new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        const item=cards.find(c=>c.slot===entry.target);
+        if(!item) return;
+        if(entry.isIntersecting){
+          loadVideo(item.video,item.card);
+        }else if(entry.target!==centerCard){
+          unloadVideo(item.video);
+        }
+      });
+    },{root:grid,rootMargin:'150% 0px',threshold:0});
+    cards.forEach(({slot})=>lazyObserver.observe(slot));
+
+    grid.scrollLeft=0;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      centerOn(listaAtual.length); // primeiro item do bloco central
+      updateCarousel();
+    }));
+  }
+
+  function step(){
+    if(!cards[0]) return 0;
+    const cs=getComputedStyle(grid);
+    return cards[0].slot.offsetWidth+(parseFloat(cs.gap)||0);
+  }
+
+  function normalize(){
+    const total=listaAtual.length;
+    const w=step()*total;
+    if(!w)return;
+    if(grid.scrollLeft<w*0.5)grid.scrollLeft+=w;
+    else if(grid.scrollLeft>w*2.5)grid.scrollLeft-=w;
+  }
+
+  function updateCarousel(){
+    if(!cards.length){ticking=false;return;}
+    normalize();
+    const rect=grid.getBoundingClientRect();
+    const centerX=rect.left+rect.width/2;
+    let nearest=null,nearestDist=Infinity;
+
+    cards.forEach(({slot})=>{
+      const r=slot.getBoundingClientRect();
+      const dist=Math.abs(centerX-(r.left+r.width/2));
+      const maxDist=rect.width/2+r.width/2;
+      const norm=Math.min(dist/maxDist,1);
+      slot.style.transform=`scale(${1.22-norm*0.44})`;
+      slot.style.zIndex=String(Math.round((1-norm)*100));
+      slot.style.opacity=String(1-norm*0.4);
+      if(dist<nearestDist){nearestDist=dist;nearest=slot;}
+    });
+
+    if(nearest!==centerCard){
+      if(centerCard){
+        centerCard.classList.remove('is-center');
+        const prev=cards.find(c=>c.slot===centerCard);
+        if(prev)prev.video.pause();
+      }
+      centerCard=nearest;
+      if(centerCard){
+        centerCard.classList.add('is-center');
+        const curr=cards.find(c=>c.slot===centerCard);
+        if(curr){
+          loadVideo(curr.video,curr.card);
+          if(curr.video.readyState>=2){
+            curr.video.currentTime=0;
+          }
+          tentarTocar(curr.video);
+        }
+      }
+    }
+    ticking=false;
+  }
+
+  function onScroll(){
+    if(!ticking){requestAnimationFrame(updateCarousel);ticking=true;}
+  }
+
+  function centerOn(index){
+    const item=cards[index];
+    if(!item)return;
+    const gr=grid.getBoundingClientRect(),sr=item.slot.getBoundingClientRect();
+    grid.scrollLeft+=(sr.left+sr.width/2)-(gr.left+gr.width/2);
+  }
+
+  grid.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',updateCarousel);
+
+  document.getElementById('prevBtn').addEventListener('click',()=>{
+    grid.scrollBy({left:-step(),behavior:'smooth'});
+  });
+  document.getElementById('nextBtn').addEventListener('click',()=>{
+    grid.scrollBy({left:step(),behavior:'smooth'});
+  });
+
+  document.querySelectorAll('.filter-btn[data-filter]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const filtro=btn.dataset.filter;
+      document.querySelectorAll('.filter-btn[data-filter]').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      fecharDetalhes();
+      montarCarrossel(sabores.filter(s=>pertenceAoFiltro(s,filtro)));
+      document.querySelector('.carousel-wrap').scrollIntoView({behavior:'smooth',block:'center'});
+    });
+  });
+
+  document.getElementById('clearFilter').addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn[data-filter]').forEach(b=>b.classList.remove('active'));
+    fecharDetalhes();
+    montarCarrossel(sabores);
+    document.querySelector('.carousel-wrap').scrollIntoView({behavior:'smooth',block:'center'});
+  });
+
+  montarCarrossel(sabores);
+
+  // ---------------------------------------------------------------
+  // 2) LINK DE AVALIAÇÃO DO GOOGLE
+  //    O QR code usa a imagem assets/QR_Avaliar.png (se o arquivo
+  //    tiver outra extensão, ex. .jpg, ajuste abaixo).
+  // ---------------------------------------------------------------
+  const REVIEW_URL = "https://g.page/r/CUeGFTd9JrYGEBM/review";
+
+  document.getElementById('reviewQr').src = "assets/QR_Avaliar.png";
+  document.getElementById('reviewLink').href = REVIEW_URL;
+</script>
+
+</body>
+</html>
