@@ -499,7 +499,7 @@
       abrirDetalhes(s.nome);
     });
 
-    return {slot,video,card};
+    return {slot,video,card,sabor:s};
   }
 
   // Tenta tocar um vídeo. Se o navegador bloquear o autoplay (raro com
@@ -542,11 +542,11 @@
     // bufferizado quando o usuário chega nele.
     video.preload='auto';
     video.addEventListener('loadeddata',()=>{
-      tentarTocar(video);
-      if(!cardEl.classList.contains('is-center')){
-        setTimeout(()=>{
-          if(!cardEl.classList.contains('is-center')) video.pause();
-        },1200);
+      // O estado "is-center" pertence ao SLOT, não ao card.
+      // Só reproduz automaticamente se este vídeo for realmente o central.
+      const slotEl = cardEl.closest('.slot');
+      if(slotEl && slotEl.classList.contains('is-center')){
+        tentarTocar(video);
       }
     },{once:true});
     video.src=video.dataset.src;
@@ -666,6 +666,8 @@
             curr.video.currentTime=0;
           }
           tentarTocar(curr.video);
+          // Exibe automaticamente os sabores do vídeo que está no centro.
+          abrirDetalhes(curr.sabor.nome);
         }
       }
     }
@@ -698,7 +700,6 @@
       const filtro=btn.dataset.filter;
       document.querySelectorAll('.filter-btn[data-filter]').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
-      fecharDetalhes();
       montarCarrossel(sabores.filter(s=>pertenceAoFiltro(s,filtro)));
       document.querySelector('.carousel-wrap').scrollIntoView({behavior:'smooth',block:'center'});
     });
@@ -706,7 +707,6 @@
 
   document.getElementById('clearFilter').addEventListener('click',()=>{
     document.querySelectorAll('.filter-btn[data-filter]').forEach(b=>b.classList.remove('active'));
-    fecharDetalhes();
     montarCarrossel(sabores);
     document.querySelector('.carousel-wrap').scrollIntoView({behavior:'smooth',block:'center'});
   });
